@@ -1,62 +1,1003 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <!-- 适配移动端 -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>我的个人作品集</title>
-  <!-- 引入CSS（后续写样式用） -->
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>姬丝秀忒·雅赛劳拉莉昂·刃下心 | 物语系列</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- GSAP 动画库 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <!-- AOS 滚动动画库 -->
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#9D2932', // 姬丝秀忒的红色
+                        secondary: '#D4AF37', // 金色瞳孔
+                        dark: '#1A1A2E', // 暗色背景
+                        light: '#F5F5F5', // 浅色背景
+                        accent: '#8A2BE2', // 紫色点缀
+                    },
+                    fontFamily: {
+                        serif: ['Playfair Display', 'serif'],
+                        sans: ['Montserrat', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;600&display=swap');
+        
+        /* 基础样式 */
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #121212;
+            color: #F5F5F5;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+        
+        /* 排版系统 */
+        h1, h2, h3, h4, h5 {
+            font-family: 'Playfair Display', serif;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+        
+        h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+        }
+        
+        h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+        }
+        
+        h3 {
+            font-size: clamp(1.5rem, 3vw, 2.25rem);
+        }
+        
+        h4 {
+            font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+        }
+        
+        p {
+            margin-bottom: 1.5rem;
+            font-size: clamp(1rem, 1.1vw, 1.125rem);
+        }
+        
+        /* 段落首行缩进 */
+        p:not(:last-child) {
+            text-indent: 2em;
+        }
+        
+        .bg-vampire {
+            background: linear-gradient(135deg, rgba(26, 26, 46, 0.95) 0%, rgba(157, 41, 50, 0.8) 100%);
+        }
+        
+        .text-shadow {
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .image-container img {
+            transition: transform 0.5s ease;
+        }
+        
+        .image-container:hover img {
+            transform: scale(1.05);
+        }
+        
+        .parallax-bg {
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        
+        .timeline-item {
+            position: relative;
+            padding-left: 30px;
+            margin-bottom: 3rem;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 2px;
+            background-color: #D4AF37;
+        }
+        
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            left: -6px;
+            top: 0;
+            height: 14px;
+            width: 14px;
+            border-radius: 50%;
+            background-color: #9D2932;
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .character-selector {
+            transition: all 0.3s ease;
+        }
+        
+        .character-selector:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .character-selector.active {
+            border: 2px solid #D4AF37;
+            transform: scale(1.05);
+        }
+        
+        /* 自定义滚动条 */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #1A1A2E;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #9D2932;
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #D4AF37;
+        }
+        
+        /* 加载动画 */
+        .loader {
+            border: 5px solid rgba(212, 175, 55, 0.3);
+            border-radius: 50%;
+            border-top: 5px solid #D4AF37;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            margin-top: -25px;
+            margin-left: -25px;
+            z-index: 9999;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .fade-in {
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+        
+        .fade-in.visible {
+            opacity: 1;
+        }
+        
+        /* 视差滚动效果 */
+        .parallax {
+            perspective: 1000px;
+            transform-style: preserve-3d;
+        }
+        
+        .parallax-layer {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            transform: translateZ(0);
+            transition: transform 0.3s ease-out;
+        }
+        
+        .parallax-deep {
+            transform: translateZ(-100px) scale(1.2);
+        }
+        
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .parallax-bg {
+                background-attachment: scroll;
+            }
+            
+            .timeline-item {
+                padding-left: 20px;
+            }
+            
+            /* 移动端排版优化 */
+            p {
+                text-indent: 1.5em;
+            }
+            
+            /* 确保移动端内容不贴边 */
+            .container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+        
+        /* 血滴动画 */
+        .blood-drop {
+            position: absolute;
+            background-color: #9D2932;
+            width: 10px;
+            height: 15px;
+            border-radius: 0 50% 50% 50%;
+            transform: rotate(45deg);
+            opacity: 0;
+            animation: blood-drop 2s linear forwards;
+        }
+        
+        @keyframes blood-drop {
+            0% {
+                opacity: 0;
+                transform: rotate(45deg) translateY(-20px);
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: rotate(45deg) translateY(100vh);
+            }
+        }
+    </style>
 </head>
 <body>
-  <!-- 导航栏 -->
-  <nav class="navbar">
-    <div class="logo">我的作品集</div>
-    <ul class="nav-links">
-      <li><a href="#">首页</a></li>
-      <li><a href="#">作品</a></li>
-      <li><a href="#">关于我</a></li>
-      <li><a href="#">联系</a></li>
-    </ul>
-  </nav>
-
-  <!-- Banner区 -->
-  <section class="banner">
-    <h1>专注前端开发的创作者</h1>
-    <p>用代码打造有温度的网站</p>
-  </section>
-
-  <!-- 作品展示区 -->
-  <section class="projects">
-    <h2>我的作品</h2>
-    <div class="project-cards">
-      <!-- 作品1 -->
-      <div class="card">
-        <img src="https://picsum.photos/600/400?random=1" alt="作品1">
-        <h3>响应式博客网站</h3>
-        <p>基于HTML/CSS/Tailwind开发，适配手机和电脑</p>
-      </div>
-      <!-- 作品2 -->
-      <div class="card">
-        <img src="https://picsum.photos/600/400?random=2" alt="作品2">
-        <h3>天气查询工具</h3>
-        <p>用JavaScript调用天气API，实时显示天气数据</p>
-      </div>
-      <!-- 作品3 -->
-      <div class="card">
-        <img src="https://picsum.photos/600/400?random=3" alt="作品3">
-        <h3>个人简历网页</h3>
-        <p>简洁大气的简历展示，支持打印功能</p>
-      </div>
+    <!-- 加载动画 -->
+    <div class="loader" id="loader"></div>
+    
+    <!-- 血滴效果容器 -->
+    <div id="blood-container"></div>
+    
+    <!-- 导航栏 -->
+    <nav class="fixed top-0 left-0 w-full z-50 transition-all duration-300" id="navbar">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold text-secondary flex items-center">
+                <span class="text-primary mr-2"><i class="fas fa-heart"></i></span>
+                <span>姬丝秀忒</span>
+            </a>
+            
+            <div class="hidden md:flex space-x-6">
+                <a href="#about" class="text-light hover:text-secondary transition-colors">角色介绍</a>
+                <a href="#appearances" class="text-light hover:text-secondary transition-colors">形象展示</a>
+                <a href="#story" class="text-light hover:text-secondary transition-colors">角色经历</a>
+                <a href="#abilities" class="text-light hover:text-secondary transition-colors">能力设定</a>
+                <a href="#gallery" class="text-light hover:text-secondary transition-colors">图库</a>
+            </div>
+            
+            <button class="md:hidden text-light focus:outline-none" id="menu-toggle">
+                <i class="fas fa-bars text-xl"></i>
+            </button>
+        </div>
+        
+        <!-- 移动端菜单 -->
+        <div class="md:hidden bg-dark hidden" id="mobile-menu">
+            <div class="container mx-auto px-4 py-3 flex flex-col space-y-3">
+                <a href="#about" class="text-light hover:text-secondary transition-colors py-2">角色介绍</a>
+                <a href="#appearances" class="text-light hover:text-secondary transition-colors py-2">形象展示</a>
+                <a href="#story" class="text-light hover:text-secondary transition-colors py-2">角色经历</a>
+                <a href="#abilities" class="text-light hover:text-secondary transition-colors py-2">能力设定</a>
+                <a href="#gallery" class="text-light hover:text-secondary transition-colors py-2">图库</a>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- 英雄区 -->
+    <header class="relative h-screen flex items-center justify-center overflow-hidden">
+        <div class="absolute inset-0 z-0">
+            <img src="https://p3-doubao-search-sign.byteimg.com/labis/78ea04a70cbd91b5f38afb09ec34f5bc~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1779377214&x-signature=aNhFCeOVhYX%2BupllIPjgsoq0Rfo%3D" 
+                 alt="姬丝秀忒·雅赛劳拉莉昂·刃下心" 
+                 class="w-full h-full object-cover opacity-60">
+            <div class="absolute inset-0 bg-gradient-to-b from-black/70 to-dark"></div>
+        </div>
+        
+        <div class="container mx-auto px-4 z-10 text-center" data-aos="fade-up" data-aos-duration="1000">
+            <h1 class="text-5xl md:text-7xl font-bold text-light mb-4 text-shadow">
+                姬丝秀忒·雅赛劳拉莉昂·刃下心
+            </h1>
+            <p class="text-xl md:text-2xl text-secondary mb-8 max-w-3xl mx-auto">
+                铁血的热血的冷血的吸血鬼 · 怪异中的怪异 · 怪异杀手 · 怪异之王
+            </p>
+            <div class="flex justify-center space-x-4">
+                <a href="#about" class="bg-primary hover:bg-primary/80 text-white px-6 py-3 rounded-full transition-all transform hover:scale-105">
+                    了解更多
+                </a>
+                <a href="#gallery" class="bg-transparent border-2 border-secondary text-secondary hover:bg-secondary/20 px-6 py-3 rounded-full transition-all transform hover:scale-105">
+                    查看图库
+                </a>
+            </div>
+        </div>
+        
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
+            <a href="#about" class="text-white opacity-80 hover:opacity-100">
+                <i class="fas fa-chevron-down text-2xl"></i>
+            </a>
+        </div>
+    </header>
+    
+    <!-- 角色介绍 -->
+    <section id="about" class="py-24 bg-dark">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-20" data-aos="fade-up">
+                <h2 class="text-4xl font-bold text-secondary mb-6">角色介绍</h2>
+                <div class="w-24 h-1 bg-primary mx-auto"></div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+                <div class="image-container rounded-lg overflow-hidden shadow-2xl" data-aos="fade-right">
+                    <img src="https://p3-doubao-search-sign.byteimg.com/labis/4c84badc32a7283db669fb1673d44e90~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1779377214&x-signature=lw%2FIiJJbmd7TFpWqucnIuFbEoHY%3D" 
+                         alt="忍野忍" 
+                         class="w-full h-auto">
+                </div>
+                
+                <div class="prose prose-invert max-w-none" data-aos="fade-left">
+                    <h3 class="text-3xl font-bold text-light mb-8">忍野忍</h3>
+                    <p class="text-light/90 mb-6 leading-relaxed">
+                        忍野忍，通称"忍"，本名雅赛萝拉，外表看上去只有八岁，有着肌肤白皙、金色瞳孔的金发少女。吸血鬼的落魄下场，美丽吸血鬼的残渣，既没有影子也没有形体，甚至本来的名字都被夺走了。
+                    </p>
+                    <p class="text-light/90 mb-6 leading-relaxed">
+                        在598年前被吸血鬼领主苏伊赛德变成吸血鬼，并被赋予了"姬丝秀忒·雅赛劳拉莉昂·刃下心"的名字，是有"铁血的热血的冷血的吸血鬼"、"怪异中的怪异"、"怪异杀手"、"怪异之王"之称的吸血鬼。
+                    </p>
+                    <p class="text-light/90 leading-relaxed">
+                        完全体是身高超过180cm的巨乳身材(外表年龄27岁)，在被阿良良木历吸了血之后，由于失去了身为吸血鬼的几乎所有力量，目前外表是只有8岁程度的幼女。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 形象展示 -->
+    <section id="appearances" class="py-24 bg-gradient-to-b from-dark to-dark/80">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-20" data-aos="fade-up">
+                <h2 class="text-4xl font-bold text-secondary mb-6">形象展示</h2>
+                <div class="w-24 h-1 bg-primary mx-auto"></div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- 幼女形态 -->
+                <div class="glass-card p-6 text-center" data-aos="fade-up" data-aos-delay="100">
+                    <div class="character-selector active h-64 rounded-lg overflow-hidden mb-4 cursor-pointer" data-character="child">
+                        <img src="https://p3-doubao-search-sign.byteimg.com/labis/6a21659d01d46ea392fcd927917c4027~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1779377214&x-signature=mGpbdDax4PUziudRe7%2F87MFfLZg%3D" 
+                             alt="幼女形态" 
+                             class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="text-xl font-bold text-secondary mb-2">幼女形态</h3>
+                    <p class="text-light/70">8岁外表，金发幼女，白色连衣裙</p>
+                </div>
+                
+                <!-- 完全体形态 -->
+                <div class="glass-card p-6 text-center" data-aos="fade-up" data-aos-delay="200">
+                    <div class="character-selector h-64 rounded-lg overflow-hidden mb-4 cursor-pointer" data-character="adult">
+                        <img src="https://p3-doubao-search-sign.byteimg.com/labis/4f09f1667294af0bc532692f2fce69c4~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1779377214&x-signature=cHXtX%2F%2FI2lFMx9COjV%2BNaEofYGs%3D" 
+                             alt="完全体形态" 
+                             class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="text-xl font-bold text-secondary mb-2">完全体形态</h3>
+                    <p class="text-light/70">27岁外表，身高180cm以上，巨乳身材</p>
+                </div>
+                
+                <!-- 人类形态 -->
+                <div class="glass-card p-6 text-center" data-aos="fade-up" data-aos-delay="300">
+                    <div class="character-selector h-64 rounded-lg overflow-hidden mb-4 cursor-pointer" data-character="human">
+                        <img src="https://p26-doubao-search-sign.byteimg.com/labis/8055ae8103268ba3739e3c2e10f8c391~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1779377214&x-signature=o%2FjVsvINPfmDoFc2ExVtMpf112A%3D" 
+                             alt="人类形态" 
+                             class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="text-xl font-bold text-secondary mb-2">人类形态</h3>
+                    <p class="text-light/70">雅赛萝拉，贵族出身的美丽公主</p>
+                </div>
+            </div>
+            
+            <!-- 角色详情展示区 -->
+            <div class="mt-16 glass-card p-8" data-aos="fade-up">
+                <div id="character-detail" class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                    <div class="rounded-lg overflow-hidden">
+                        <img id="character-image" src="https://p3-doubao-search-sign.byteimg.com/labis/6a21659d01d46ea392fcd927917c4027~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1779377214&x-signature=mGpbdDax4PUziudRe7%2F87MFfLZg%3D" 
+                             alt="忍野忍" 
+                             class="w-full h-auto">
+                    </div>
+                    
+                    <div>
+                        <h3 id="character-title" class="text-3xl font-bold text-secondary mb-4">幼女形态</h3>
+                        <div class="space-y-4">
+                            <p class="text-light/80 leading-relaxed">
+                                失去力量后的忍野忍，外表是只有8岁的金发幼女。有着白皙的肌肤和金色的瞳孔，通常穿着白色的连衣裙和凉鞋。
+                            </p>
+                            <p class="text-light/80 leading-relaxed">
+                                在《伪物语》中改变形象，拿掉了防风眼镜安全帽，通常是一身白色的连衣裙和凉鞋。虽然外形是个幼女，就连心理都变成小孩子了，但本质上依然是吸血鬼。
+                            </p>
+                            <p class="text-light/80 leading-relaxed">
+                                非常喜欢甜甜圈(Mr.Donut)，曾发下"只要甜甜圈存在之一天，吾就不会毁灭人类!"的誓言。受到自己出身地的影响，忍是个红茶党，但也不会拒绝咖啡。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 角色经历 -->
+    <section id="story" class="py-24 bg-dark/80">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-20" data-aos="fade-up">
+                <h2 class="text-4xl font-bold text-secondary mb-6">角色经历</h2>
+                <div class="w-24 h-1 bg-primary mx-auto"></div>
+            </div>
+            
+            <div class="max-w-4xl mx-auto">
+                <!-- 时间线 -->
+                <div class="space-y-12">
+                    <!-- 600年前 -->
+                    <div class="timeline-item pb-12" data-aos="fade-up">
+                        <h3 class="text-2xl font-bold text-secondary mb-3">600年前</h3>
+                        <div class="glass-card p-6">
+                            <p class="text-light/80 leading-relaxed">
+                                忍野忍原本是一位美丽高贵的人类公主雅赛萝拉(Acerola)。她有着柔顺的金发，瓜子脸加上大大的双眼，鲜红的嘴唇，柔细的颈子，清透的肌肤，白皙的手指，窈窕的曲线。
+                            </p>
+                            <p class="text-light/80 leading-relaxed mt-3">
+                                她的美貌令任何人都不惜献上生命，她所走过的道路成为了尸山。这引起了遥远国度的巫婆的好奇，前来施法具现化了公主的内在。没想到公主的内在过于无瑕，国王自阳台一跃而下，皇后睡梦中安详离世，城堡前堆起了因公主的完美内在而自我了结的屍山包括那位施咒的巫婆。
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <!-- 598年前 -->
+                    <div class="timeline-item pb-12" data-aos="fade-up" data-aos-delay="100">
+                        <h3 class="text-2xl font-bold text-secondary mb-3">598年前</h3>
+                        <div class="glass-card p-6">
+                            <p class="text-light/80 leading-relaxed">
+                                雅赛萝拉自愿成为殊杀尊主的眷属，这样至少能以吃下肚的方式接受他人的献身，因而继承了殊杀尊主的强大能力，成为了"铁血的热血的冷血的吸血鬼"、"怪异中的怪异"、"怪异杀手"、"怪异之王"。
+                            </p>
+                            <p class="text-light/80 leading-relaxed mt-3">
+                                她被吸血鬼领主苏伊赛德变成吸血鬼，并被赋予了"姬丝秀忒·雅赛劳拉莉昂·刃下心"的名字。
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <!-- 春假（伤物语） -->
+                    <div class="timeline-item pb-12" data-aos="fade-up" data-aos-delay="200">
+                        <h3 class="text-2xl font-bold text-secondary mb-3">春假（伤物语）</h3>
+                        <div class="glass-card p-6">
+                            <p class="text-light/80 leading-relaxed">
+                                吸血鬼姬丝秀忒作为自杀志愿者，为找寻葬身之地来到日本，却遭吸血鬼猎人的追杀。濒死之际的姬丝秀忒得到阿良良木历的帮助。姬丝秀忒在吸干了历的血后而得救，而历则变成了姬丝秀忒的眷属(=吸血鬼)。
+                            </p>
+                            <p class="text-light/80 leading-relaxed mt-3">
+                                为让历变回人类，姬丝秀忒打算牺牲自己的生命，最后在忍野咩咩的折中方案下，姬丝秀忒被夺走了绝大部分的吸血鬼特性和技能，无影、无形、无源、无本，甚至连名字都没有，作为吸血鬼的残渣的幼女而活下去;而历则通过吸取姬丝秀忒的血，变回人类(严格上是十分接近人类的类人类的吸血鬼)。
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <!-- 黄金周（化物语） -->
+                    <div class="timeline-item pb-12" data-aos="fade-up" data-aos-delay="300">
+                        <h3 class="text-2xl font-bold text-secondary mb-3">黄金周（化物语）</h3>
+                        <div class="glass-card p-6">
+                            <p class="text-light/80 leading-relaxed">
+                                由于封印障猫的功绩，而被忍野咩咩取名"忍野忍"用作束缚，还得到防风眼镜帽的奖励。起初被暂称为"吸血鬼小妹或吸血鬼幼女(吸血鬼ちゃん)"。
+                            </p>
+                            <p class="text-light/80 leading-relaxed mt-3">
+                                与忍野咩咩共同居住在补习班"叡考塾"的废墟中，由于没能如愿为自己的眷属而死怨恨着历，并不再对历开口说话，单方面沉默以对。
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <!-- 伪物语 -->
+                    <div class="timeline-item" data-aos="fade-up" data-aos-delay="400">
+                        <h3 class="text-2xl font-bold text-secondary mb-3">伪物语及以后</h3>
+                        <div class="glass-card p-6">
+                            <p class="text-light/80 leading-relaxed">
+                                在《翼魅猫》中，忍离开"叡考塾"并"踏上寻找自己的旅途"，最后躲到了历的影子里。被封印在历的影子里的忍，出入是自由的，但是却走不出历的影子范围。
+                            </p>
+                            <p class="text-light/80 leading-relaxed mt-3">
+                                在《火怜蜂》章中，忍与历和解、建立起信赖关系。自称历的眷属(实则互为主仆关系)，称呼历为"吾之主(我があるじ样)"、"汝这位大爷(お前样)"。
+                            </p>
+                            <p class="text-light/80 leading-relaxed mt-3">
+                                由于与历由影子连系在一起，忍和历感觉上是共通的(实际上只是历单方向的传递给忍)，爱憎的感情上也受到历的影响，还能做到某种程度的读心术。正如忍所说的，她与历是"一心同体，一莲托生"。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 能力设定 -->
+    <section id="abilities" class="py-24 bg-gradient-to-b from-dark/80 to-dark">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-20" data-aos="fade-up">
+                <h2 class="text-4xl font-bold text-secondary mb-6">能力设定</h2>
+                <div class="w-24 h-1 bg-primary mx-auto"></div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <!-- 吸血鬼能力 -->
+                <div class="glass-card p-8" data-aos="fade-right">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 rounded-full bg-primary flex items-center justify-center mr-4">
+                            <i class="fas fa-blood text-white text-xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-secondary">吸血鬼能力</h3>
+                    </div>
+                    
+                    <ul class="space-y-4">
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-primary mt-1 mr-3"></i>
+                            <p class="text-light/80">
+                                <span class="font-semibold text-secondary">能量吸取：</span>
+                                会将怪异当做食物来吃掉，这是吸血鬼的基本能力之一。
+                            </p>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-primary mt-1 mr-3"></i>
+                            <p class="text-light/80">
+                                <span class="font-semibold text-secondary">影子移动：</span>
+                                可以藏在影子里，但只能进入历和与历有血缘关系的人的影子。
+                            </p>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-primary mt-1 mr-3"></i>
+                            <p class="text-light/80">
+                                <span class="font-semibold text-secondary">物质创造：</span>
+                                在历的影子里时可以使用一些物质创造能力，能制作衣服，但做出游戏机之类的东西已经是极限。
+                            </p>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-primary mt-1 mr-3"></i>
+                            <p class="text-light/80">
+                                <span class="font-semibold text-secondary">体重操纵：</span>
+                                可以随便操纵自己的体重，这是吸血鬼的特殊能力之一。
+                            </p>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-primary mt-1 mr-3"></i>
+                            <p class="text-light/80">
+                                <span class="font-semibold text-secondary">时间移动：</span>
+                                可以通过咏唱利用集中起来的怪异的灵能量进行时间移动。
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- 性格与知识 -->
+                <div class="glass-card p-8" data-aos="fade-left">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 rounded-full bg-primary flex items-center justify-center mr-4">
+                            <i class="fas fa-brain text-white text-xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-secondary">性格与知识</h3>
+                    </div>
+                    
+                    <div class="space-y-6">
+                        <div>
+                            <h4 class="text-xl font-semibold text-secondary mb-2">性格特点</h4>
+                            <p class="text-light/80 leading-relaxed">
+                                自大傲慢的超S性格，货真价实的傲娇。自尊心极强，对称赞之词没有承受力。虽然有过中期沉默寡言的角色设定，但实际却是个很健谈、话非常多的家伙。
+                            </p>
+                            <p class="text-light/80 leading-relaxed mt-2">
+                                有着像是古人的说话方式。由于是在四百年前学习的日语，因此使用的日语很古风，会使用"吾(侬)"、"汝(うぬ)"这样的文言称呼。
+                            </p>
+                        </div>
+                        
+                        <div>
+                            <h4 class="text-xl font-semibold text-secondary mb-2">知识储备</h4>
+                            <p class="text-light/80 leading-relaxed">
+                                具备丰富的关于怪异的知识。在"叡考塾"的废墟与忍野咩咩共同居住期间，经过了长达几个月的英才教育，忍拥有了大量有关怪异的知识，亦可以称之为专家中的专家了。
+                            </p>
+                            <p class="text-light/80 leading-relaxed mt-2">
+                                自称没有记住任何固有名词，也不会用名字来称呼人，而能明确记住全名的，好像也只有历和历的妹妹阿良良木火怜、阿良良木月火。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 与阿良良木历的关系 -->
+            <div class="mt-16 glass-card p-8" data-aos="fade-up">
+                <div class="flex items-center mb-6">
+                    <div class="w-12 h-12 rounded-full bg-primary flex items-center justify-center mr-4">
+                        <i class="fas fa-heart text-white text-xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-secondary">与阿良良木历的关系</h3>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                    <div>
+                        <p class="text-light/80 leading-relaxed">
+                            在《伤物语》中，历曾向当时还没有忍这个名字的忍发下"如果你的生命明天到了尾声，那我活到明天便足够;如果你今天为我活了下来，那我也会活在当下"的誓言。而在《倾物语》中，忍也向历表达了"吾也想跟汝死在一起"的感情。
+                        </p>
+                        <p class="text-light/80 leading-relaxed mt-3">
+                            在《翼·魅猫》章中，忍抱着"历找不到自己就毁灭世界"的觉悟任性地离家出走。而在《倾物语》中的异世界中，由于八九寺真宵没有怪异化而改变历史，在那一天(6月14日)历没有找到忍，人类就此毁灭。
+                        </p>
+                        <p class="text-light/80 leading-relaxed mt-3">
+                            3月13日(终物语下的开头)时由于历的死亡暂时与历切断联系，再度成为完全体。曆被复活后两者之间并无物理上的羁绊，但仍称呼曆为主人，自愿再度被封印在历的影子里，成功恢复与历的羁绊。
+                        </p>
+                    </div>
+                    
+                    <div class="rounded-lg overflow-hidden">
+                        <img src="https://p26-doubao-search-sign.byteimg.com/labis/bf1fd27f5713f1b7ffb77eed3e96984b~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1779377214&x-signature=FHXxjUfg%2BCdKXE6YGfVtI0N%2BZyg%3D" 
+                             alt="姬丝秀忒与阿良良木历" 
+                             class="w-full h-auto">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 图库 -->
+    <section id="gallery" class="py-24 bg-dark">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-20" data-aos="fade-up">
+                <h2 class="text-4xl font-bold text-secondary mb-6">图库</h2>
+                <div class="w-24 h-1 bg-primary mx-auto"></div>
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <!-- 图片1 -->
+                <div class="image-container rounded-lg overflow-hidden shadow-lg" data-aos="fade-up" data-aos-delay="100">
+                    <img src="https://p3-doubao-search-sign.byteimg.com/labis/4f09f1667294af0bc532692f2fce69c4~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1779377214&x-signature=cHXtX%2F%2FI2lFMx9COjV%2BNaEofYGs%3D" 
+                         alt="姬丝秀忒·雅赛劳拉莉昂·刃下心" 
+                         class="w-full h-64 object-cover">
+                </div>
+                
+                <!-- 图片2 -->
+                <div class="image-container rounded-lg overflow-hidden shadow-lg" data-aos="fade-up" data-aos-delay="200">
+                    <img src="https://p3-doubao-search-sign.byteimg.com/labis/4c84badc32a7283db669fb1673d44e90~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1779377214&x-signature=lw%2FIiJJbmd7TFpWqucnIuFbEoHY%3D" 
+                         alt="忍野忍" 
+                         class="w-full h-64 object-cover">
+                </div>
+                
+                <!-- 图片3 -->
+                <div class="image-container rounded-lg overflow-hidden shadow-lg" data-aos="fade-up" data-aos-delay="300">
+                    <img src="https://p3-doubao-search-sign.byteimg.com/labis/78ea04a70cbd91b5f38afb09ec34f5bc~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1779377214&x-signature=aNhFCeOVhYX%2BupllIPjgsoq0Rfo%3D" 
+                         alt="姬丝秀忒·雅赛劳拉莉昂·刃下心" 
+                         class="w-full h-64 object-cover">
+                </div>
+                
+                <!-- 图片4 -->
+                <div class="image-container rounded-lg overflow-hidden shadow-lg" data-aos="fade-up" data-aos-delay="400">
+                    <img src="https://p3-doubao-search-sign.byteimg.com/labis/0f3ca6017c9e66cd3fc28ecd4ffbf0df~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1779377214&x-signature=57JG7CDys%2FCZi2CJBZErAOBno7E%3D" 
+                         alt="姬丝秀忒·雅赛劳拉莉昂·刃下心" 
+                         class="w-full h-64 object-cover">
+                </div>
+                
+                <!-- 图片5 -->
+                <div class="image-container rounded-lg overflow-hidden shadow-lg" data-aos="fade-up" data-aos-delay="100">
+                    <img src="https://p3-doubao-search-sign.byteimg.com/labis/6a21659d01d46ea392fcd927917c4027~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1779377214&x-signature=mGpbdDax4PUziudRe7%2F87MFfLZg%3D" 
+                         alt="忍野忍" 
+                         class="w-full h-64 object-cover">
+                </div>
+                
+                <!-- 图片6 -->
+                <div class="image-container rounded-lg overflow-hidden shadow-lg" data-aos="fade-up" data-aos-delay="200">
+                    <img src="https://p3-doubao-search-sign.byteimg.com/labis/3ed60b8cd9e966597439887f07004586~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1779377214&x-signature=5NRF%2FuFfQtPi44EJyV%2BcCxaIvrM%3D" 
+                         alt="忍野忍" 
+                         class="w-full h-64 object-cover">
+                </div>
+                
+                <!-- 图片7 -->
+                <div class="image-container rounded-lg overflow-hidden shadow-lg" data-aos="fade-up" data-aos-delay="300">
+                    <img src="https://p3-doubao-search-sign.byteimg.com/labis/938130c982083c661de0a9fa6bdb1d64~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1779377214&x-signature=K6IIY3hsiDrGlm1eVKVafcowiy8%3D" 
+                         alt="忍野忍" 
+                         class="w-full h-64 object-cover">
+                </div>
+                
+                <!-- 图片8 -->
+                <div class="image-container rounded-lg overflow-hidden shadow-lg" data-aos="fade-up" data-aos-delay="400">
+                    <img src="https://p3-doubao-search-sign.byteimg.com/labis/478f07dfaa6addc3c4fa7194cee93ba0~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1779377214&x-signature=ho7LfZIi2dX28VwSLU3YdQa%2BPTU%3D" 
+                         alt="忍野忍" 
+                         class="w-full h-64 object-cover">
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 引用 -->
+    <section class="py-20 bg-vampire">
+        <div class="container mx-auto px-4 text-center" data-aos="fade-up">
+            <blockquote class="text-2xl md:text-3xl italic text-light max-w-4xl mx-auto leading-relaxed">
+                "只要甜甜圈存在之一天，吾就不会毁灭人类！"
+            </blockquote>
+            <p class="text-secondary mt-6 text-lg">— 忍野忍</p>
+        </div>
+    </section>
+    
+    <!-- 页脚 -->
+    <footer class="bg-dark py-12">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <a href="#" class="text-2xl font-bold text-secondary flex items-center">
+                        <span class="text-primary mr-2"><i class="fas fa-heart"></i></span>
+                        <span>姬丝秀忒·雅赛劳拉莉昂·刃下心</span>
+                    </a>
+                    <p class="text-light/60 mt-2">© 2025 物语系列角色网站</p>
+                </div>
+                
+                <div class="flex space-x-4">
+                    <a href="#" class="text-light/60 hover:text-secondary transition-colors">
+                        <i class="fab fa-twitter text-xl"></i>
+                    </a>
+                    <a href="#" class="text-light/60 hover:text-secondary transition-colors">
+                        <i class="fab fa-instagram text-xl"></i>
+                    </a>
+                    <a href="#" class="text-light/60 hover:text-secondary transition-colors">
+                        <i class="fab fa-facebook text-xl"></i>
+                    </a>
+                    <a href="#" class="text-light/60 hover:text-secondary transition-colors">
+                        <i class="fab fa-pinterest text-xl"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="border-t border-light/10 mt-8 pt-8 text-center">
+                <p class="text-light/40 text-sm">
+                    本网站仅供学习和欣赏，所有内容均来自网络，版权归原作者所有。
+                </p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- 返回顶部按钮 -->
+    <button id="back-to-top" class="fixed bottom-8 right-8 bg-primary hover:bg-primary/80 text-white w-12 h-12 rounded-full flex items-center justify-center shadow-lg opacity-0 invisible transition-all duration-300">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+    
+    <!-- 图片查看器 -->
+    <div id="image-viewer" class="fixed inset-0 bg-black/90 z-50 flex items-center justify-center hidden">
+        <button id="close-viewer" class="absolute top-4 right-4 text-white text-2xl hover:text-secondary">
+            <i class="fas fa-times"></i>
+        </button>
+        <img id="viewer-image" src="" alt="放大图片" class="max-w-full max-h-full">
     </div>
-  </section>
-
-  <!-- 底部 -->
-  <footer class="footer">
-    <p>© 2024 我的作品集 | 手搓网站实战</p>
-  </footer>
-
-  <!-- 引入JavaScript（后续加交互用） -->
-  <script src="script.js"></script>
+    
+    <script>
+        // 初始化AOS动画库
+        document.addEventListener('DOMContentLoaded', function() {
+            AOS.init({
+                duration: 800,
+                easing: 'ease-in-out',
+                once: true
+            });
+            
+            // 隐藏加载动画
+            setTimeout(function() {
+                document.getElementById('loader').style.opacity = '0';
+                setTimeout(function() {
+                    document.getElementById('loader').style.display = 'none';
+                    document.body.classList.add('fade-in', 'visible');
+                }, 500);
+            }, 1500);
+            
+            // 导航栏滚动效果
+            const navbar = document.getElementById('navbar');
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('bg-dark/90', 'backdrop-blur-md', 'shadow-lg');
+                } else {
+                    navbar.classList.remove('bg-dark/90', 'backdrop-blur-md', 'shadow-lg');
+                }
+            });
+            
+            // 移动端菜单切换
+            const menuToggle = document.getElementById('menu-toggle');
+            const mobileMenu = document.getElementById('mobile-menu');
+            
+            menuToggle.addEventListener('click', function() {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            // 平滑滚动
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // 关闭移动端菜单
+                    mobileMenu.classList.add('hidden');
+                    
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+            
+            // 返回顶部按钮
+            const backToTopButton = document.getElementById('back-to-top');
+            
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 300) {
+                    backToTopButton.classList.remove('opacity-0', 'invisible');
+                    backToTopButton.classList.add('opacity-100', 'visible');
+                } else {
+                    backToTopButton.classList.remove('opacity-100', 'visible');
+                    backToTopButton.classList.add('opacity-0', 'invisible');
+                }
+            });
+            
+            backToTopButton.addEventListener('click', function() {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+            
+            // 角色选择器
+            const characterSelectors = document.querySelectorAll('.character-selector');
+            const characterImage = document.getElementById('character-image');
+            const characterTitle = document.getElementById('character-title');
+            const characterDetail = document.getElementById('character-detail');
+            
+            const characterData = {
+                child: {
+                    image: 'https://p3-doubao-search-sign.byteimg.com/labis/6a21659d01d46ea392fcd927917c4027~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1779377214&x-signature=mGpbdDax4PUziudRe7%2F87MFfLZg%3D',
+                    title: '幼女形态',
+                    content: `
+                        <p class="text-light/80 leading-relaxed">
+                            失去力量后的忍野忍，外表是只有8岁的金发幼女。有着白皙的肌肤和金色的瞳孔，通常穿着白色的连衣裙和凉鞋。
+                        </p>
+                        <p class="text-light/80 leading-relaxed mt-3">
+                            在《伪物语》中改变形象，拿掉了防风眼镜安全帽，通常是一身白色的连衣裙和凉鞋。虽然外形是个幼女，就连心理都变成小孩子了，但本质上依然是吸血鬼。
+                        </p>
+                        <p class="text-light/80 leading-relaxed mt-3">
+                            非常喜欢甜甜圈(Mr.Donut)，曾发下"只要甜甜圈存在之一天，吾就不会毁灭人类!"的誓言。受到自己出身地的影响，忍是个红茶党，但也不会拒绝咖啡。
+                        </p>
+                    `
+                },
+                adult: {
+                    image: 'https://p3-doubao-search-sign.byteimg.com/labis/4f09f1667294af0bc532692f2fce69c4~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1779377214&x-signature=cHXtX%2F%2FI2lFMx9COjV%2BNaEofYGs%3D',
+                    title: '完全体形态',
+                    content: `
+                        <p class="text-light/80 leading-relaxed">
+                            姬丝秀忒·雅赛劳拉莉昂·刃下心是忍野忍的完全体形态，外表年龄27岁，身高超过180cm的巨乳身材。有着一头会让人着迷的金色秀发、身穿古典洋装、容貌姣好、美丽到令人惊艳的传说中的吸血鬼。
+                        </p>
+                        <p class="text-light/80 leading-relaxed mt-3">
+                            在吸血鬼中是拥有瞬间再生能力、能够吸收怪异能量的罕见类型，在吸血鬼中也是最高阶的吸血鬼，有"铁血的热血的冷血的吸血鬼"、"怪异中的怪异"、"怪异杀手"、"怪异之王"之称。
+                        </p>
+                        <p class="text-light/80 leading-relaxed mt-3">
+                            视"太阳为吾之劲敌"、有"总有一天要将其打倒"的远大目标。不喜欢毫无意义的杀生行为，可以避免的会尽量避免。只要每个月吃一个人类即可，一年顶多才十二个人。以五百年来换算，不过也才六千人。
+                        </p>
+                    `
+                },
+                human: {
+                    image: 'https://p26-doubao-search-sign.byteimg.com/labis/8055ae8103268ba3739e3c2e10f8c391~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1779377214&x-signature=o%2FjVsvINPfmDoFc2ExVtMpf112A%3D',
+                    title: '人类形态',
+                    content: `
+                        <p class="text-light/80 leading-relaxed">
+                            雅赛萝拉(Acerola)是忍野忍作为人类时的本名。约600年前，她是一个贵族出身的女孩，拥有着银色的长发，异色瞳，被称为美丽公主。
+                        </p>
+                        <p class="text-light/80 leading-relaxed mt-3">
+                            她的美貌令任何人都不惜献上生命，她所走过的道路成为了尸山。这引起了遥远国度的巫婆的好奇，前来施法具现化了公主的内在。没想到公主的内在过于无瑕，国王自阳台一跃而下，皇后睡梦中安详离世，城堡前堆起了因公主的完美内在而自我了结的屍山包括那位施咒的巫婆。
+                        </p>
+                        <p class="text-light/80 leading-relaxed mt-3">
+                            最终，雅赛萝拉自愿成为殊杀尊主的眷属，这样至少能以吃下肚的方式接受他人的献身，因而继承了殊杀尊主的强大能力，成为了吸血鬼。
+                        </p>
+                    `
+                }
+            };
+            
+            characterSelectors.forEach(selector => {
+                selector.addEventListener('click', function() {
+                    const character = this.getAttribute('data-character');
+                    
+                    // 更新选中状态
+                    characterSelectors.forEach(s => s.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // 更新内容
+                    characterImage.src = characterData[character].image;
+                    characterTitle.textContent = characterData[character].title;
+                    
+                    // 创建新的内容容器
+                    const contentContainer = document.createElement('div');
+                    contentContainer.innerHTML = characterData[character].content;
+                    
+                    // 替换旧内容
+                    const oldContent = characterDetail.querySelector('div:last-child');
+                    characterDetail.replaceChild(contentContainer, oldContent);
+                    
+                    // 添加动画效果
+                    gsap.from(characterImage, { opacity: 0, y: 20, duration: 0.5 });
+                    gsap.from(characterTitle, { opacity: 0, y: 20, duration: 0.5, delay: 0.2 });
+                    gsap.from(contentContainer, { opacity: 0, y: 20, duration: 0.5, delay: 0.4 });
+                });
+            });
+            
+            // 图片查看器
+            const imageViewer = document.getElementById('image-viewer');
+            const viewerImage = document.getElementById('viewer-image');
+            const closeViewer = document.getElementById('close-viewer');
+            const galleryImages = document.querySelectorAll('.image-container img');
+            
+            galleryImages.forEach(image => {
+                image.addEventListener('click', function() {
+                    viewerImage.src = this.src;
+                    imageViewer.classList.remove('hidden');
+                    document.body.style.overflow = 'hidden';
+                });
+            });
+            
+            closeViewer.addEventListener('click', function() {
+                imageViewer.classList.add('hidden');
+                document.body.style.overflow = 'auto';
+            });
+            
+            imageViewer.addEventListener('click', function(e) {
+                if (e.target === imageViewer) {
+                    imageViewer.classList.add('hidden');
+                    document.body.style.overflow = 'auto';
+                }
+            });
+            
+            // 血滴效果
+            function createBloodDrop() {
+                const bloodContainer = document.getElementById('blood-container');
+                const bloodDrop = document.createElement('div');
+                bloodDrop.classList.add('blood-drop');
+                
+                // 随机位置
+                const posX = Math.random() * window.innerWidth;
+                bloodDrop.style.left = `${posX}px`;
+                
+                // 随机动画持续时间
+                const duration = 2 + Math.random() * 3;
+                bloodDrop.style.animationDuration = `${duration}s`;
+                
+                bloodContainer.appendChild(bloodDrop);
+                
+                // 动画结束后移除元素
+                setTimeout(() => {
+                    bloodDrop.remove();
+                }, duration * 1000);
+            }
+            
+            // 每隔一段时间创建血滴
+            setInterval(createBloodDrop, 5000);
+            
+            // 视差滚动效果
+            window.addEventListener('scroll', function() {
+                const scrolled = window.pageYOffset;
+                const parallaxElements = document.querySelectorAll('.parallax-bg');
+                
+                parallaxElements.forEach(element => {
+                    const speed = 0.5;
+                    element.style.transform = `translateY(${scrolled * speed}px)`;
+                });
+            });
+        });
+    </script>
 </body>
 </html>
